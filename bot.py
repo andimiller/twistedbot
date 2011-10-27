@@ -1,6 +1,6 @@
 from twisted.words.protocols import irc
 from twisted.internet import protocol
-from moduleloader import Importer
+from importer import Importer
 import re
 
 class TwistedBot(irc.IRCClient):
@@ -22,6 +22,7 @@ class TwistedBot(irc.IRCClient):
         print msg
         for r in self.functions.keys():
             if r.match(msg):
+                print "Launching:", self.functions[r]
                 self.functions[r](self, user, channel, msg)
 
 class TwistedBotFactory(protocol.ClientFactory):

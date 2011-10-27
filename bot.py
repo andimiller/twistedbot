@@ -3,11 +3,6 @@ from twisted.internet import protocol
 from moduleloader import Importer
 import re
 
-class Plugins(object):
-    def hello(self, tbot, user, channel, msg):
-        tbot.msg(channel,"Greetings %s from %s!" % (user, channel))
-    hello.rule = re.compile("hello TwistedBot")
-
 class TwistedBot(irc.IRCClient):
     def _get_nickname(self):
         return self.factory.nickname
@@ -22,8 +17,6 @@ class TwistedBot(irc.IRCClient):
 
     def joined(self, channel):
         print "Joined %s." % (channel)
-        #self.msg(channel, "Greetings %s! I am a friendly new IRC bot written in Twisted!" % channel)
-        #self.msg(channel, "I am event driven! I'm fully threaded! I even have dynamic module loading! and I'm currently 43 lines of python!")
 
     def privmsg(self, user, channel, msg):
         print msg

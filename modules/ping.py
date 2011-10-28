@@ -2,7 +2,7 @@
 import random
 
 def hello(tbot, user, channel, msg): 
-   greeting = random.choice(('Hi', 'Hey', 'Hello', 'Heya', 'Good Morrow'))
+   greeting = random.choice(('Hi', 'Hey', 'Hello', 'Heya', 'Good Morrow', 'What ho', 'Howdy there', 'Howdy, 'S\'up'))
    punctuation = random.choice(('', '!'))
    tbot.msg(channel, greeting + ' ' + user.split("!")[0] + punctuation)
 hello.rule = '(?i)(hi|hello|hey|heya|greetings) TwistedBot'

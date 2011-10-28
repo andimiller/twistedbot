@@ -8,8 +8,11 @@ class TwistedBot(irc.IRCClient):
         return self.factory.nickname
     def _get_functions(self):
         return self.factory.functions
+    def _get_joined(self):
+        return self.factory.joined
     nickname = property(_get_nickname)
     functions = property(_get_functions)
+    joinedFunctions = property(_get_joined)
 
     def signedOn(self):
         self.join(self.factory.channel)
@@ -17,6 +20,8 @@ class TwistedBot(irc.IRCClient):
 
     def joined(self, channel):
         print "Joined %s." % (channel)
+        for j in self.joinedFunctions:
+            j(self, channel)
 
     def privmsg(self, user, channel, msg):
         print msg
@@ -34,6 +39,7 @@ class TwistedBotFactory(protocol.ClientFactory):
         self.nickname = nickname
         i = Importer()
         self.functions = i.functions
+        self.joined = i.joined
 
     def clientConnectionLost(self, connector, reason):
         print "Lost connection (%s), reconnecting." % (reason)

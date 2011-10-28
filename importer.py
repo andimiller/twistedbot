@@ -5,6 +5,7 @@ stripinternals = lambda x:x[0:2]!="__"
 
 class Importer(object):
     functions = dict()
+    joined = []
     def __init__(self):
         for file in os.listdir("modules/"):
             if file.endswith(".py"):
@@ -23,3 +24,5 @@ class Importer(object):
                 rule = re.compile(rule)
                 print "%s -> %s" % (rule, item)
                 self.functions[rule] = member
+            if "joined" in list:
+                self.joined.append(member)

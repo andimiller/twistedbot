@@ -10,9 +10,28 @@ class TwistedBot(irc.IRCClient):
         return self.factory.functions
     def _get_joined(self):
         return self.factory.joined
+    def _get_userKicked(self):
+        return self.factory.userKicked
     nickname = property(_get_nickname)
     functions = property(_get_functions)
     joinedFunctions = property(_get_joined)
+    userKickedFunctions = property(_get_userKicked)
+
+    versionName = "TwistedBot"
+    versionNum = "v0.1"
+    sourceURL = "https://bitbucket.org/Sylnai/twistedbot/"
+
+    def kickedFrom(self, channel, kicker, message):
+        print "Kicked from %s by %s with message %s" % (channel, kicker, message)
+
+    def userJoined(self, user, channel):
+        print "%s joined %s" % (user, channel)
+
+    def userKicked(self, kickee, channel, kicker, message):
+        print "%s got kicked from %s by %s with message %s" % (kickee, channel, kicker, message)
+        #self.mode(channel, False, "o", user=kicker)
+        for f in self.userKickedFunctions:
+            f(self, kickee, channel, kicker, message)
 
     def signedOn(self):
         self.join(self.factory.channel)
@@ -40,6 +59,7 @@ class TwistedBotFactory(protocol.ClientFactory):
         i = Importer()
         self.functions = i.functions
         self.joined = i.joined
+        self.userKicked = i.userKicked
 
     def clientConnectionLost(self, connector, reason):
         print "Lost connection (%s), reconnecting." % (reason)

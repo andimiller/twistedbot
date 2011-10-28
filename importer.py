@@ -6,6 +6,7 @@ stripinternals = lambda x:x[0:2]!="__"
 class Importer(object):
     functions = dict()
     joined = []
+    userKicked = []
     def __init__(self):
         for file in os.listdir("modules/"):
             if file.endswith(".py"):
@@ -26,3 +27,5 @@ class Importer(object):
                 self.functions[rule] = member
             if "joined" in list:
                 self.joined.append(member)
+            if "userKicked" in list:
+                self.userKicked.append(member)

@@ -1,5 +1,6 @@
 from twisted.words.protocols import irc
 from twisted.internet import protocol
+from datetime import datetime
 from importer import Importer
 import re
 
@@ -21,33 +22,35 @@ class TwistedBot(irc.IRCClient):
     versionNum = "v0.1"
     sourceURL = "https://bitbucket.org/Sylnai/twistedbot/"
 
+    def _logit(self, message):
+        print "%s %s" % (datetime.now().strftime("%H:%M:%S"), message)
+
     def kickedFrom(self, channel, kicker, message):
-        print "Kicked from %s by %s with message %s" % (channel, kicker, message)
+        self._logit("Kicked from %s by %s with message %s" % (channel, kicker, message))
 
     def userJoined(self, user, channel):
-        print "%s joined %s" % (user, channel)
+        self._logit("%s joined %s" % (user, channel))
 
     def userKicked(self, kickee, channel, kicker, message):
-        print "%s got kicked from %s by %s with message %s" % (kickee, channel, kicker, message)
-        #self.mode(channel, False, "o", user=kicker)
+        self._logit("%s got kicked from %s by %s with message %s" % (kickee, channel, kicker, message))
         for f in self.userKickedFunctions:
             f(self, kickee, channel, kicker, message)
 
     def signedOn(self):
         self.join(self.factory.channel)
-        print "Signed on as %s." % (self.nickname)
+        self._logit("Signed on as %s." % (self.nickname))
 
     def joined(self, channel):
-        print "Joined %s." % (channel)
+        self._logit("Joined %s." % (channel))
         for j in self.joinedFunctions:
             j(self, channel)
 
     def privmsg(self, user, channel, msg):
-        print msg
+        user= user.split("!")[0]
+        self._logit("%s: <%s> %s" % (channel,user,msg))
         for r in self.functions.keys():
             if r.match(msg):
-                print "Launching:", self.functions[r]
-                user= user.split("!")[0]
+                self._logit("Launching: %s" % self.functions[r])
                 self.functions[r](self, user, channel, msg)
 
 class TwistedBotFactory(protocol.ClientFactory):

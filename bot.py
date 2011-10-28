@@ -23,6 +23,7 @@ class TwistedBot(irc.IRCClient):
         for r in self.functions.keys():
             if r.match(msg):
                 print "Launching:", self.functions[r]
+                user= user.split("!")[0]
                 self.functions[r](self, user, channel, msg)
 
 class TwistedBotFactory(protocol.ClientFactory):

@@ -2,17 +2,17 @@
 import random
 
 def hello(tbot, user, channel, msg): 
-   greeting = random.choice(('Hi', 'Hey', 'Hello', 'Heya', 'Good Morrow', 'What ho', 'Howdy there', 'Howdy, 'S\'up'))
+   greeting = random.choice(('Hi', 'Hey', 'Hello', 'Heya', 'Good Morrow', 'What ho', 'Howdy there', 'Howdy', 'Sup'))
    punctuation = random.choice(('', '!'))
-   tbot.msg(channel, greeting + ' ' + user.split("!")[0] + punctuation)
+   tbot.msg(channel, greeting + ' ' + user + punctuation)
 hello.rule = '(?i)(hi|hello|hey|heya|greetings) TwistedBot'
 
 def interjection(tbot, user, channel, msg):
-   tbot.msg(channel, user.split("!")[0] + '!')
+   tbot.msg(channel, user + '!')
 interjection.rule = r'TwistedBot!'
 
 def love(tbot, user, channel, msg):
-   tbot.msg(channel,"<3 "+user.split("!")[0])
+   tbot.msg(channel,"<3 "+user)
 love.rule='<3 TwistedBot'
 
 def question(tbot, user, channel, msg):

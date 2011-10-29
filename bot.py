@@ -24,31 +24,31 @@ class TwistedBot(irc.IRCClient):
     logger = Logger()
 
     def kickedFrom(self, channel, kicker, message):
-        self.logger.log(4,"Kicked from %s by %s with message %s" % (channel, kicker, message))
+        self.logger.log("WARN","Kicked from %s by %s with message %s" % (channel, kicker, message))
 
     def userJoined(self, user, channel):
-        self.logger.log(2,"%s joined %s" % (user, channel))
+        self.logger.log("INFO","%s joined %s" % (user, channel))
 
     def userKicked(self, kickee, channel, kicker, message):
-        self.logger.log(3,"%s got kicked from %s by %s with message %s" % (kickee, channel, kicker, message))
+        self.logger.log("WARN","%s got kicked from %s by %s with message %s" % (kickee, channel, kicker, message))
         for f in self.userKickedFunctions:
             f(self, kickee, channel, kicker, message)
 
     def signedOn(self):
         self.join(self.factory.channel)
-        self.logger.log(0,"Signed on as %s." % (self.nickname))
+        self.logger.log("GOOD","Signed on as %s." % (self.nickname))
 
     def joined(self, channel):
-        self.logger.log(0,"Joined %s." % (channel))
+        self.logger.log("GOOD","Joined %s." % (channel))
         for j in self.joinedFunctions:
             j(self, channel)
 
     def privmsg(self, user, channel, msg):
-        user= user.split("!")[0]
-        self.logger.log(1,"%s: <%s> %s" % (channel,user,msg))
+        user = user.split("!")[0]
+        self.logger.log("OKAY","%s: <%s> %s" % (channel,user,msg))
         for r in self.functions.keys():
             if r.match(msg):
-                self.logger.log(0,"Launching: %s" % self.functions[r])
+                self.logger.log("INFO","Launching: %s" % self.functions[r])
                 self.functions[r](self, user, channel, msg)
 
 class TwistedBotFactory(protocol.ClientFactory):

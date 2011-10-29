@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 import os, sys, imp
+from logger import Logger
 import re
 stripinternals = lambda x:x[0:2]!="__"
 
 class Importer(object):
+    logger = Logger()
     functions = dict()
     joined = []
     userKicked = []
@@ -13,6 +15,7 @@ class Importer(object):
                 self._import(file)
 
     def _import(self,name):
+        self.logger.log("INFO", "Loading modules from %s" % name)
         mod = imp.load_source(name.split(".")[0], "modules/"+name)
         d = dir(mod)
         d = filter(stripinternals, d)
@@ -22,10 +25,12 @@ class Importer(object):
             list =  filter(stripinternals, list)
             if "rule" in list:
                 rule = getattr(member, "rule")
+                self.logger.log("GOOD", "privmsg: /%s/ -> %s" % (rule, item))
                 rule = re.compile(rule)
-                print "%s -> %s" % (rule, item)
                 self.functions[rule] = member
             if "joined" in list:
+                self.logger.log("GOOD", "joined: %s" % member)
                 self.joined.append(member)
             if "userKicked" in list:
+                self.logger.log("GOOD", "userKicked: %s" % member)
                 self.userKicked.append(member)

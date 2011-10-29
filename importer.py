@@ -25,7 +25,7 @@ class Importer(object):
             list =  filter(stripinternals, list)
             if "rule" in list:
                 rule = getattr(member, "rule")
-                self.logger.log("GOOD", "privmsg: /%s/ -> %s" % (rule, item))
+                self.logger.log("GOOD", "privmsg: /%s/ -> %s" % (rule, member))
                 rule = re.compile(rule)
                 self.functions[rule] = member
             if "joined" in list:

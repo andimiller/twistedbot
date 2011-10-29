@@ -1,5 +1,6 @@
 from twisted.words.protocols import irc
 from twisted.internet import protocol
+from twisted.internet import task
 from importer import Importer
 from logger import Logger
 import re
@@ -50,6 +51,13 @@ class TwistedBot(irc.IRCClient):
             if r.match(msg):
                 self.logger.log("INFO","Launching: %s" % self.functions[r])
                 self.functions[r](self, user, channel, msg)
+
+    def timepassed(logger):
+        logger.log("INFO", "one minute passed")
+        pass
+
+    l = task.LoopingCall(timepassed, logger)
+    l.start(60) # call every sixty seconds
 
 class TwistedBotFactory(protocol.ClientFactory):
     protocol = TwistedBot

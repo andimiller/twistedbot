@@ -5,8 +5,8 @@ This is designed to be a modular event-driven framework for an IRC bot, my goal 
 ## Dependencies
 Current dependencies include:
 
-* twisted
-* twisted-words
+* Twisted
+* Ttwisted-Words
 * PyYAML
 * Pygments
 

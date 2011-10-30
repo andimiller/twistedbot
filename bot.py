@@ -14,15 +14,17 @@ class TwistedBot(irc.IRCClient):
         return self.factory.joined
     def _get_userKicked(self):
         return self.factory.userKicked
+    def _get_logger(self):
+        return self.factory.logger
     nickname = property(_get_nickname)
     functions = property(_get_functions)
     joinedFunctions = property(_get_joined)
     userKickedFunctions = property(_get_userKicked)
+    logger = property(_get_logger)
 
     versionName = "TwistedBot"
     versionNum = "v0.1"
     sourceURL = "https://bitbucket.org/Sylnai/twistedbot/"
-    logger = Logger()
 
     def kickedFrom(self, channel, kicker, message):
         self.logger.log("WARN","Kicked from %s by %s with message %s" % (channel, kicker, message))
@@ -53,21 +55,14 @@ class TwistedBot(irc.IRCClient):
                 self.logger.log("INFO","Launching: %s" % self.functions[r])
                 self.functions[r](self, user, channel, msg)
 
-    def timepassed(logger):
-        logger.log("INFO", "one minute passed")
-        pass
-
-    l = task.LoopingCall(timepassed, logger)
-    l.start(60) # call every sixty seconds
-
 class TwistedBotFactory(protocol.ClientFactory):
     protocol = TwistedBot
 
     def __init__(self, settings):
-        self.channels = settings["channels"]
-        self.nickname = settings["nickname"]
-        self.admins = settings["admins"]
-        i = Importer()
+        for key in settings.keys():
+            setattr(self, key, settings[key])
+        self.logger = Logger(self.verbosity)
+        i = Importer(self.logger)
         self.functions = i.functions
         self.joined = i.joined
         self.userKicked = i.userKicked

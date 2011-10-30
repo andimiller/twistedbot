@@ -2,7 +2,14 @@ import yaml
 
 class Config(object):
     settings = dict()
+    configfile = ""
     def __init__(self, configfile):
-        f = open(configfile, "r")
-        data = "".join(f.readlines())
-        self.settings = yaml.load(data)
+        self.configfile = configfile
+
+    def parse(self):
+        try:
+            f = open(self.configfile, "r")
+            data = "".join(f.readlines())
+            return yaml.load(data)
+        except IOError:
+            return False

@@ -5,11 +5,12 @@ import re
 stripinternals = lambda x:x[0:2]!="__"
 
 class Importer(object):
-    logger = Logger()
     functions = dict()
     joined = []
     userKicked = []
-    def __init__(self):
+    logger = None
+    def __init__(self, logger):
+        self.logger = logger
         for file in os.listdir("modules/"):
             if file.endswith(".py"):
                 self._import(file)

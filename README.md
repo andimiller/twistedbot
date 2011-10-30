@@ -4,6 +4,7 @@ This is designed to be a modular event-driven framework for an IRC bot, my goal 
 
 ## Dependencies
 Current dependencies include:
+
 * Python 2.6+
 * Twisted
 * TwistedWords

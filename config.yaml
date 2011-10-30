@@ -1,5 +1,5 @@
 nickname: TwistedBot
 network: irc.aberwiki.org
-channels: [lolhax]
+channels: [lolhax, 42]
 admins: [Sylnai, reality]
 verbosity: 2

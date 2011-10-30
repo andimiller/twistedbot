@@ -45,7 +45,7 @@ class TwistedBot(irc.IRCClient):
     def joined(self, channel):
         self.logger.log("GOOD","Joined %s." % (channel))
         for j in self.joinedFunctions:
-            j(self, channel)
+            j(self, str(channel))
 
     def privmsg(self, user, channel, msg):
         user = user.split("!")[0]

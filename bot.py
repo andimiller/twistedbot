@@ -56,6 +56,8 @@ class TwistedBot(irc.IRCClient):
                 self.logger.log("INFO","Launched: %s" % self.functions[r])
 
     def say(self, channel, message, length = None):
+        if isinstance(message, unicode):
+            message=message.encode("utf-8")
         #hand off to normal msg function
         self.msg(channel, message, length)
 

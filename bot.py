@@ -36,9 +36,10 @@ class TwistedBot(irc.IRCClient):
             f(self, kickee, channel, kicker, message)
 
     def signedOn(self):
-        self.join(self.factory.channel)
         self.logger.log("GOOD","Signed on as %s." % (self.nickname))
-
+        for channel in self.factory.channels:
+            self.join(channel)
+        
     def joined(self, channel):
         self.logger.log("GOOD","Joined %s." % (channel))
         for j in self.joinedFunctions:
@@ -62,9 +63,10 @@ class TwistedBot(irc.IRCClient):
 class TwistedBotFactory(protocol.ClientFactory):
     protocol = TwistedBot
 
-    def __init__(self, channel, nickname='TwistedBot'):
-        self.channel = channel
-        self.nickname = nickname
+    def __init__(self, settings):
+        self.channels = settings["channels"]
+        self.nickname = settings["nickname"]
+        self.admins = settings["admins"]
         i = Importer()
         self.functions = i.functions
         self.joined = i.joined

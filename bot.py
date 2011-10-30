@@ -52,8 +52,12 @@ class TwistedBot(irc.IRCClient):
         self.logger.log("OKAY","%s: <%s> %s" % (channel,user,msg))
         for r in self.functions.keys():
             if r.match(msg):
-                self.logger.log("INFO","Launching: %s" % self.functions[r])
                 self.functions[r](self, user, channel, msg)
+                self.logger.log("INFO","Launched: %s" % self.functions[r])
+
+    def say(self, channel, message, length = None):
+        #hand off to normal msg function
+        self.msg(channel, message, length)
 
 class TwistedBotFactory(protocol.ClientFactory):
     protocol = TwistedBot

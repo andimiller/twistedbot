@@ -1,5 +1,6 @@
 import urllib2
 import json
+from django.utils.encoding import smart_str
 
 def getCommitSummary(url):
     m = url.split("/")
@@ -15,12 +16,12 @@ def getCommitSummary(url):
     person = data["author"]
     timestamp = data["timestamp"]
     branch = data["branch"]
-    commitmessage = ddata["message"]
+    commitmessage = data["message"]
 
     return "%s: [%s] %s - %s - %s" % (revision, timestamp, branch, person, commitmessage)
 
 
 def bitbucket(tbot, user, channel, msg):
     m = msg.split(" ")
-    tbot.msg(channel, '\x0311'+str(getCommitSummary(m[0])+chr(15)))
+    tbot.msg(channel, '\x0311'+smart_str(getCommitSummary(m[0])+chr(15)))
 bitbucket.rule = "https://bitbucket.org/.*/changeset/.*"

@@ -1,17 +1,22 @@
-from BeautifulSoup import BeautifulSoup
 import urllib2
-import re
-removetags=re.compile("<(.|\n)*?>")
+import json
 
 def getCommitSummary(url):
-    f = urllib2.urlopen(url)
+    m = url.split("/")
+    (username, reponame, ignoreme, changeset) = m[-4:]
+    apiurl = "https://api.bitbucket.org/1.0/repositories/%s/%s/changesets/%s/" % (username, reponame, changeset)
+    f = urllib2.urlopen(apiurl)
     data = f.read()
-    soup = BeautifulSoup(data)
-    soup = soup.find("div", {"id" : "source-summary" })
-    commitmessage = removetags.sub("",str(soup.find("p")))
-    branch = removetags.sub("",str(soup.findAll("dd")[2]))
-    person = removetags.sub("",str(soup.findAll("a")[-1]))
-    return '\x0311'+"%s - %s - %s" % (person, branch, commitmessage) + chr(15)
+    parseddata = json.loads(data)
+    revision = parseddata["revision"]
+    person = parseddata["author"]
+    timestamp = parseddata["timestamp"]
+    branch = parseddata["branch"]
+    commitmessage = parseddata["message"]
+
+    return '\x0311'+"%s: [%s] %s - %s - %s" % (revision, timestamp, branch, person, commitmessage) + chr(15)
+print getCommitSummary("https://bitbucket.org/Sylnai/twistedbot/changeset/b3d833f49765")
+
 
 def bitbucket(tbot, user, channel, msg):
     m = msg.split(" ")

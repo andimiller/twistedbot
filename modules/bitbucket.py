@@ -10,12 +10,12 @@ def getCommitSummary(url):
         data = f.read()
     except urllib2.HTTPError:
         return "Access Denied, repository is private."
-    parseddata = json.loads(data)
-    revision = parseddata["revision"]
-    person = parseddata["author"]
-    timestamp = parseddata["timestamp"]
-    branch = parseddata["branch"]
-    commitmessage = parseddata["message"]
+    data = json.loads(data)
+    revision = data["revision"]
+    person = data["author"]
+    timestamp = data["timestamp"]
+    branch = data["branch"]
+    commitmessage = ddata["message"]
 
     return "%s: [%s] %s - %s - %s" % (revision, timestamp, branch, person, commitmessage)
 

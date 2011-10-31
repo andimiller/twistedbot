@@ -39,7 +39,7 @@ def main():
         settings["verbosity"] = 0
 
     #Configration loaded, start the main bot
-    reactor.connectTCP(settings["network"], 6667, TwistedBotFactory(settings))
+    reactor.connectTCP(settings["network"], 6667, TwistedBotFactory(settings, config))
     reactor.suggestThreadPoolSize(10)
     reactor.run()
 

@@ -10,6 +10,18 @@ class Config(object):
         try:
             f = open(self.configfile, "r")
             data = "".join(f.readlines())
+            f.close()
             return yaml.load(data)
         except IOError:
             return False
+
+    def addVariable(self,d):
+        data = self.parse()
+        if data:
+            data.update(d)
+            output = yaml.dump(data)
+            f = open(self.configfile, "w")
+            f.write(output)
+            f.close()
+            return True
+        return False

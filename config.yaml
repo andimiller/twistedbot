@@ -1,5 +1,8 @@
-nickname: TwistedBot
-network: irc.aberwiki.org
-channels: [lolhax]
 admins: [Sylnai, reality]
+channels: [lolhax]
+network: irc.aberwiki.org
+nickname: TwistedBot
+repos:
+- [Sylnai, twistedbot, 40]
+- [Sylnai, element80, 6]
 verbosity: 2

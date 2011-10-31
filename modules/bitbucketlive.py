@@ -43,4 +43,5 @@ def watchIt(tbot):
             tbot.logger.log("INFO", str(d))
             tbot.msg(channel, d)
             tbot.repos[i][2] += 1
+            tbot.config.addVariable({"repos": tbot.repos})
 watchIt.mainMethod = True

@@ -14,17 +14,26 @@ class TwistedBot(irc.IRCClient):
         return self.factory.joined
     def _get_userKicked(self):
         return self.factory.userKicked
+    def _get_main(self):
+        return self.factory.main
     def _get_logger(self):
         return self.factory.logger
     nickname = property(_get_nickname)
     functions = property(_get_functions)
     joinedFunctions = property(_get_joined)
     userKickedFunctions = property(_get_userKicked)
+    main = property(_get_main)
     logger = property(_get_logger)
+    repos = [["Sylnai", "twistedbot", 35], ["Sylnai", "element80", 5]]
 
     versionName = "TwistedBot"
     versionNum = "v0.1"
     sourceURL = "https://bitbucket.org/Sylnai/twistedbot/"
+
+    def init(self):
+        self.logger.log("INFO", "Starting main loop")
+        l = task.LoopingCall(self.mainloops,self.main)
+        l.start(5, now=False)
 
     def kickedFrom(self, channel, kicker, message):
         self.logger.log("WARN","Kicked from %s by %s with message %s" % (channel, kicker, message))
@@ -61,6 +70,12 @@ class TwistedBot(irc.IRCClient):
         #hand off to normal msg function
         self.msg(channel, message, length)
 
+    def mainloops(self, main):
+        self.logger.log("INFO", "Doing main loops")
+        if self.init > 0:
+            for m in main:
+                m(self)
+
 class TwistedBotFactory(protocol.ClientFactory):
     protocol = TwistedBot
 
@@ -68,10 +83,22 @@ class TwistedBotFactory(protocol.ClientFactory):
         for key in settings.keys():
             setattr(self, key, settings[key])
         self.logger = Logger(self.verbosity)
+        self.logger.log("INFO", "Factory created")
         i = Importer(self.logger)
         self.functions = i.functions
         self.joined = i.joined
         self.userKicked = i.userKicked
+        self.main = i.main
+
+    def buildProtocol(self, addr):
+        self.logger.log("INFO", "Building an instance of %s" % self.protocol)
+        p = self.protocol()
+        p.factory = self
+        p.init()
+        return p
+    
+    def startedConnecting(self, connector):
+        self.logger.log("INFO", "Attempting to init new client")
 
     def clientConnectionLost(self, connector, reason):
         print "Lost connection (%s), reconnecting." % (reason)
@@ -79,5 +106,3 @@ class TwistedBotFactory(protocol.ClientFactory):
 
     def clientConnectionFailed(self, connector, reason):
         print "Could not connect: %s" % (reason)
-
-

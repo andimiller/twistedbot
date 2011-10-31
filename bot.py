@@ -49,11 +49,11 @@ class TwistedBot(irc.IRCClient):
 
     def privmsg(self, user, channel, msg):
         user = user.split("!")[0]
-        self.logger.log("OKAY","%s: <%s> %s" % (channel,user,msg))
         for r in self.functions.keys():
             if r.match(msg):
                 self.functions[r](self, user, channel, msg)
                 self.logger.log("INFO","Launched: %s" % self.functions[r])
+        self.logger.log("OKAY","%s: <%s> %s" % (channel,user,msg))
 
     def say(self, channel, message, length = None):
         if isinstance(message, unicode):

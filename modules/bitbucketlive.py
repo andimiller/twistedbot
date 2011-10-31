@@ -34,14 +34,14 @@ def getAllCommits(repo):
                 yield getCommitSummary(username, reponame, k["node"])
 
 def watchIt(tbot):
-    channel = "#lolhax"
     for i, repo in enumerate(tbot.repos):
         generator = getAllCommits(repo)
         d=generator.next()
         if d != False:
             d = "\x036 New change in %s/%s -> " % (repo[0], repo[1]) +chr(15)+ '\x0311'+ str(d) + chr(15)
             tbot.logger.log("INFO", str(d))
-            tbot.msg(channel, d)
+            for channel in tbot.channels:
+                tbot.msg(channel, d)
             tbot.repos[i][2] += 1
             tbot.config.addVariable({"repos": tbot.repos})
 watchIt.mainMethod = True

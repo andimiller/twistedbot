@@ -39,8 +39,8 @@ def watchIt(tbot):
         generator = getAllCommits(repo)
         d=generator.next()
         if d != False:
-            d = "New change in %s/%s ->" % (repo[0], repo[1]) + d
+            d = "\x036 New change in %s/%s -> " % (repo[0], repo[1]) +chr(15)+ '\x0311'+ str(d) + chr(15)
             tbot.logger.log("INFO", str(d))
-            tbot.msg(channel, '\x0311'+str(d)+chr(15))
+            tbot.msg(channel, d)
             tbot.repos[i][2] += 1
-watchIt.main = True
+watchIt.mainMethod = True

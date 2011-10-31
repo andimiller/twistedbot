@@ -8,7 +8,7 @@ import re
 
 class TwistedBot(irc.IRCClient):
     versionName = "TwistedBot"
-    versionNum = "v0.1"
+    versionNum = "v0.2"
     sourceURL = "https://bitbucket.org/Sylnai/twistedbot/"
 
     def init(self):

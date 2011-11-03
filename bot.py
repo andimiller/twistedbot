@@ -11,9 +11,24 @@ class TwistedBot(irc.IRCClient):
     versionNum = "v0.2"
     sourceURL = "https://bitbucket.org/Sylnai/twistedbot/"
 
+    def loadModules(self, clear=False):
+        if clear:
+            self.logger.log("WARN", "Clearing out old modules")
+            self.functions = dict()
+            self.joinedFunctions = []
+            self.userKicked = []
+            self.main = []
+        self.logger.log("WARN", "Loading modules")
+        i = Importer(self.logger)
+        self.functions = i.functions
+        self.joinedFunctions = i.joined
+        self.userKicked = i.userKicked
+        self.main = i.main
+
     def init(self):
+        self.loadModules()
         self.logger.log("INFO", "Starting main loop")
-        if getattr(self, "main"):
+        if "main" in dir(self):
             l = task.LoopingCall(self.mainloops)
             l.start(30, now=False)
 
@@ -25,8 +40,9 @@ class TwistedBot(irc.IRCClient):
 
     def userKicked(self, kickee, channel, kicker, message):
         self.logger.log("WARN","%s got kicked from %s by %s with message %s" % (kickee, channel, kicker, message))
-        for f in self.userKickedFunctions:
-            f(self, kickee, channel, kicker, message)
+        if "userKickedFunctions" in dir(self):
+            for f in self.userKickedFunctions:
+                f(self, kickee, channel, kicker, message)
 
     def signedOn(self):
         self.logger.log("GOOD","Signed on as %s." % (self.nickname))
@@ -37,8 +53,9 @@ class TwistedBot(irc.IRCClient):
         self.logger.log("GOOD","Joined %s." % (channel))
         if channel not in self.channels:
             self.channels.append(channel)
-        for j in self.joinedFunctions:
-            j(self, channel)
+        if "joinedFunctions" in dir(self):
+            for j in self.joinedFunctions:
+                j(self, channel)
 
     def left(self, channel):
         self.logger.log("GOOD", "left %s." % (channel))
@@ -47,11 +64,12 @@ class TwistedBot(irc.IRCClient):
 
     def privmsg(self, user, channel, msg):
         user = user.split("!")[0]
-        for r in self.functions.keys():
-            if r.match(msg):
-                self.functions[r](self, user, channel, msg)
-                self.logger.log("INFO","Launched: %s" % self.functions[r])
-        self.logger.log("OKAY","%s: <%s> %s" % (channel,user,msg))
+        if "functions" in dir(self):
+            for r in self.functions.keys():
+                if r.match(msg):
+                    self.functions[r](self, user, channel, msg)
+                    self.logger.log("INFO","Launched: %s" % self.functions[r])
+            self.logger.log("OKAY","%s: <%s> %s" % (channel,user,msg))
 
     def say(self, channel, message, length = None):
         if isinstance(message, unicode):
@@ -83,14 +101,7 @@ class TwistedBotFactory(protocol.ClientFactory):
         for key in self.settings.keys():
             setattr(p, key, self.settings[key])
         p.config = self.config
-        #Migrate functions
-        i = Importer(self.logger)
-        p.functions = i.functions
-        p.joinedFunctions = i.joined
-        p.userKicked = i.userKicked
-        p.main = i.main
         p.init()
-        self.logger.log("WARN", "Main is: %s" % i.main)
         return p
     
     def startedConnecting(self, connector):

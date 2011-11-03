@@ -6,20 +6,29 @@ import re
 stripinternals = lambda x:x[0:2]!="__"
 
 class Importer(object):
-    functions = dict()
-    joined = []
-    userKicked = []
-    main = []
+    loadedModules = []
     logger = None
     def __init__(self, logger):
         self.logger = logger
+        self.functions = dict()
+        self.userKicked = []
+        self.joined = []
+        self.main = []
+        for oldmodule in self.loadedModules:
+            self.loadedModules.remove(oldmodule)
+            del sys.modules[oldmodule.__name__]
+        if self.loadedModules:
+            del self.loadedModules
+        self.loadedModules = []
         for file in os.listdir("modules/"):
             if file.endswith(".py"):
                 self._import(file)
+        self.logger.log("WARN", str(self.loadedModules))
 
     def _import(self,name):
         self.logger.log("INFO", "Loading modules from %s" % name)
         mod = imp.load_source(name.split(".")[0], "modules/"+name)
+        self.loadedModules.append(mod)
         d = dir(mod)
         d = filter(stripinternals, d)
         for item in d:

@@ -4,7 +4,7 @@ from twisted.internet import task
 from importer import Importer
 from logger import Logger
 from config import Config
-import re
+import re, sys
 
 class TwistedBot(irc.IRCClient):
     versionName = "TwistedBot"
@@ -14,7 +14,7 @@ class TwistedBot(irc.IRCClient):
     def loadModules(self, clear=False):
         if clear:
             self.logger.log("WARN", "Clearing out old modules")
-            self.functions = dict()
+            self.functions.clear
             self.joinedFunctions = []
             self.userKicked = []
             self.main = []

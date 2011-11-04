@@ -1,6 +1,7 @@
 from datetime import datetime
 import pygments.console
 from cgi import escape
+import re
 from twisted.web.resource import Resource
 
 class Logger(object):
@@ -26,8 +27,11 @@ class Logger(object):
         self.verbosity = verbosity
 
     def csscolorize(self, level, string):
-        string = escape(string)
-        return '<p class="%s">%s</p>' % (level, string)
+        url=re.compile("(https?|ftp)(://)([\w_/\.&=-]*)")
+        result = escape(string)
+        if url.search(result):
+            result = " ".join(map(lambda x:url.match(x) and "<a href='"+x+"' >"+x+"</a>" or x, result.split()))
+        return '<p class="%s">%s</p>' % (level, result)
 
     def log(self, loglevel, message):
         if loglevel in self.verbositylevels[self.verbosity]:
@@ -39,7 +43,7 @@ class logReader(Resource):
     page = """<html>
 <head>
     <title>TwistedBot WebLogger</title>
-<meta http-equiv="Refresh" content="5" \>
+<meta http-equiv="Refresh" content="2" \>
 <style type="text/css"><!--
 body {
     background-color: rgb(0,0,0);
@@ -71,4 +75,4 @@ p.ERROR {color: rgb(255,85,85) }
         self.logger = logger
 
     def render(self, request):
-        return self.page % "\n".join(self.logger.webBuffer[-50:])
+        return self.page % "\n".join(self.logger.webBuffer[-30:])

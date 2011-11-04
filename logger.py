@@ -25,24 +25,41 @@ class Logger(object):
         self.log("INFO","Verbosity set to %s, logging at: %s" % (verbosity, self.verbositylevels[verbosity]))
         self.verbosity = verbosity
 
+    def csscolorize(self, level, string):
+        string = escape(string)
+        return '<p class="%s">%s</p>' % (level, string)
+
     def log(self, loglevel, message):
         if loglevel in self.verbositylevels[self.verbosity]:
             m = "%s %s" % (datetime.now().strftime("%H:%M:%S"), message)
             print pygments.console.colorize(self.loglevels[loglevel], m)
-            self.webBuffer.append(m)
+            self.webBuffer.append(self.csscolorize(loglevel, m))
 
 class logReader(Resource):
     page = """<html>
 <head>
     <title>TwistedBot WebLogger</title>
+<meta http-equiv="Refresh" content="5" \>
 <style type="text/css"><!--
 body {
-    background-color: rgb(24,24,24);
+    background-color: rgb(0,0,0);
     overflow:hidden;
     font-family: courier,fixed,swiss,sans-serif;
     font-size: 16px;
     color: #33d011;
 }
+p {
+padding: 0;
+margin-top: 0;
+margin-right: 0;
+margin-bottom: 0;
+margin-left: 0;
+}
+p.GOOD {color: rgb(0,187,0) }
+p.INFO {color: rgb(0,0,187) }
+p.OKAY {color: rgb(187,187,187) }
+p.WARN {color: rgb(187,0,0) }
+p.ERROR {color: rgb(255,85,85) }
 --></style>
 </head>
 <body>
@@ -54,5 +71,4 @@ body {
         self.logger = logger
 
     def render(self, request):
-        data = map(escape, self.logger.webBuffer)
-        return self.page % "<br>".join(data)
+        return self.page % "\n".join(self.logger.webBuffer[-50:])

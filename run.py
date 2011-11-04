@@ -2,8 +2,12 @@
 import sys
 import getopt
 from bot import *
+from logger import *
+from cgi import escape
 from config import Config
 from twisted.internet import reactor
+from twisted.web.server import Site
+from twisted.web.resource import Resource
 
 def showhelp(exitcode):
     print """TwistedBot
@@ -38,8 +42,18 @@ def main():
     if "verbosity" not in settings:
         settings["verbosity"] = 0
 
-    #Configration loaded, start the main bot
-    reactor.connectTCP(settings["network"], 6667, TwistedBotFactory(settings, config))
+
+    #Set up the logging
+    logger = Logger(settings["verbosity"])
+    #Set up the Web Server
+    r = Resource()
+    r.putChild('', logReader(logger))
+    webFactory = Site(r)
+    reactor.listenTCP(8888, webFactory)
+    #Set up the IRC Bot
+    BotFactory =  TwistedBotFactory(settings, config, logger)
+    BotFactory.logger = logger
+    reactor.connectTCP(settings["network"], 6667, TwistedBotFactory(settings, config, logger))
     reactor.suggestThreadPoolSize(10)
     reactor.run()
 

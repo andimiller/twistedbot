@@ -85,10 +85,10 @@ class TwistedBot(irc.IRCClient):
 class TwistedBotFactory(protocol.ClientFactory):
     protocol = TwistedBot
 
-    def __init__(self, settings, config):
-        self.config = Config(config)
+    def __init__(self, settings, config, logger):
         self.settings = settings
-        self.logger = Logger(settings["verbosity"])
+        self.config = Config(config) 
+        self.logger = logger
         self.logger.log("INFO", "Factory created")
 
     def buildProtocol(self, addr):

@@ -78,7 +78,7 @@ class TwistedBot(irc.IRCClient):
         self.msg(channel, message, length)
 
     def mainloops(self):
-        self.logger.log("INFO", "Doing main loop")
+        #self.logger.log("INFO", "Doing main loop")
         for m in self.main:
             m(self)
 

@@ -37,3 +37,11 @@ def reload(tbot, user, channel, msg):
         tbot.loadModules(clear=True)
         tbot.say(channel, "Reloaded modules.")
 reload.rule = "!reload"
+
+def verbosity(tbot, user, channel, msg):
+    if user in tbot.admins:
+        newlevel = int(msg.split(" ")[-1])
+        tbot.logger.verbosity = newlevel
+        tbot.logger.log("INFO", "Verbosity changed to %s." % newlevel)
+verbosity.rule = "^!verbosity [0-9]$"
+

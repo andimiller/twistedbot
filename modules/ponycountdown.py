@@ -10,9 +10,8 @@ def nextponies():
     r=sorted(r)
     if r[0].seconds>0:
         return "%s until ponies!" % str(r[0]).split(".")[0]
-        #return "%s days, %s hours, %s minutes until ponies!" % str(r[0])
     return "OutOfPoniesException: no ponies found in the future."
 
 def ponies(tbot, user, channel, msg):
     tbot.msg(channel,nextponies())
-ponies.rule = "^!ponies"
+ponies.rule = "^!ponies$"

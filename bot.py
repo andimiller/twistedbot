@@ -67,8 +67,13 @@ class TwistedBot(irc.IRCClient):
         if "functions" in dir(self):
             for r in self.functions.keys():
                 if r.match(msg):
-                    self.functions[r](self, user, channel, msg)
-                    self.logger.log("INFO","Launched: %s" % self.functions[r])
+                    try:
+                        self.functions[r](self, user, channel, msg)
+                        self.logger.log("INFO","Launched: %s" % self.functions[r])
+                    except Exception as e:
+                        self.logger.log("ERROR","Error when launching %s:" % self.functions[r])
+                        self.msg(channel, "%s: %s" % (type(e), e))
+                        raise
             self.logger.log("OKAY","%s: <%s> %s" % (channel,user,msg))
 
     def say(self, channel, message, length = None):

@@ -5,9 +5,19 @@ def sub(message, regex):
     return re.sub(regex[1], regex[2], message)
 
 def substitute(tbot, user, channel, msg):
-    tbot.logger.log("INFO", "Regexing:%s" % msg)
-    tbot.msg(channel, sub(tbot.messages[user], msg))
+    newmessage = sub(tbot.messages[user], msg)
+    if newmessage != tbot.messages[user]:
+        tbot.messages[user] = newmessage
+        tbot.msg(channel, "<%s> %s" % (user, newmessage))
 substitute.rule="^s\/.*"
+
+def directedsubstitute(tbot, user, channel, msg):
+    (target, regex) = re.compile("^(.*?): (.*)").match(msg).groups()
+    newmessage = sub(tbot.messages[target], msg)
+    if newmessage != tbot.messages[target]:
+        tbot.messages[target] = newmessage
+        tbot.msg(channel, "<%s> %s" % (user, newmessage))
+directedsubstitute.rule="^.*?: s/.*"
 
 def lastmsg(tbot, user, channel, msg):
     msg = msg.split()

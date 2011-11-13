@@ -2,9 +2,9 @@ from datetime import datetime
 
 def nextponies():
     times = [
-            datetime(2011, 11, 12, 14),
-            datetime(2011, 11, 19, 14),
-            datetime(2011, 11, 26, 14)
+            datetime(2011, 11, 12, 15),
+            datetime(2011, 11, 19, 15),
+            datetime(2011, 11, 26, 15)
             ]
     r=map(lambda x:x-datetime.now(), times)
     r=sorted(r)

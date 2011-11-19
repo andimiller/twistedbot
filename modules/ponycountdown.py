@@ -8,8 +8,9 @@ def nextponies():
             ]
     r=map(lambda x:x-datetime.now(), times)
     r=sorted(r)
-    if r[0].seconds>0:
-        return "%s until ponies!" % str(r[0]).split(".")[0]
+    for x in r:
+        if x.days>=0:
+            return "%s until ponies!" % str(x).split(".")[0]
     return "OutOfPoniesException: no ponies found in the future."
 
 def ponies(tbot, user, channel, msg):

@@ -30,7 +30,7 @@ class TwistedBot(irc.IRCClient):
         self.logger.log("INFO", "Starting main loop")
         if "main" in dir(self):
             l = task.LoopingCall(self.mainloops)
-            l.start(30, now=False)
+            l.start(2, now=False)
 
     def kickedFrom(self, channel, kicker, message):
         self.logger.log("WARN","Kicked from %s by %s with message %s" % (channel, kicker, message))

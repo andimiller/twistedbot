@@ -1,4 +1,5 @@
 import re
+import datetime
 
 def sub(message, regex):
     regex=re.split("(?<!\\\\)/",regex)
@@ -25,9 +26,18 @@ def lastmsg(tbot, user, channel, msg):
         tbot.msg(channel, "%s: I last saw %s say: %s" % (user, msg[1], tbot.messages[msg[1]]))
 lastmsg.rule="^!lastmsg"
 
+def seen(tbot, user, channel, msg):
+    msg = msg.split()
+    if len(msg)>1 and msg[1] in tbot.seen:
+        tbot.msg(channel, tbot.seen[msg[1]])
+seen.rule="^!seen"
+
 def storemessage(tbot, user, channel, msg):
+    if not hasattr(tbot, "seen"):
+        tbot.seen = dict()
     if not hasattr(tbot, "messages"):
         tbot.messages = dict()
     if not msg.startswith("s/"):
         tbot.messages[user]=msg
+    tbot.seen[user]= "I last saw %s at %s in %s. " % (user,datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), channel)
 storemessage.rule=".*"

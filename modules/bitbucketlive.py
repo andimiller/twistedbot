@@ -33,6 +33,10 @@ def getAllCommits(repo):
                 lastcommit = k["revision"]
                 yield getCommitSummary(username, reponame, k["node"])
 
+def checkBB(tbot, user, channel, msg):
+    watchIt(tbot)
+checkBB.rule="^!checkBB"
+
 def watchIt(tbot):
     for i, repo in enumerate(tbot.repos):
         generator = getAllCommits(repo)

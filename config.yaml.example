@@ -1,5 +1,6 @@
 admins: [Sylnai]
 channels: [lolhax]
+moduleblacklist: [rainbowdash]
 network: irc.aberwiki.org
 nickname: TwistedBot
 repos:

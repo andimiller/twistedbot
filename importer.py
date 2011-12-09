@@ -7,9 +7,11 @@ stripinternals = lambda x:x[0:2]!="__"
 
 class Importer(object):
     loadedModules = []
+    blacklist = []
     logger = None
-    def __init__(self, logger):
+    def __init__(self, logger, blacklist):
         self.logger = logger
+        self.blacklist = blacklist
         self.functions = dict()
         self.userKicked = []
         self.joined = []
@@ -26,6 +28,9 @@ class Importer(object):
         self.logger.log("WARN", str(self.loadedModules))
 
     def _import(self,name):
+        if name.split(".")[0] in self.blacklist:
+            self.logger.log("INFO", "Skipping blacklisted module %s" % name)
+            return
         self.logger.log("INFO", "Loading modules from %s" % name)
         mod = imp.load_source(name.split(".")[0], "modules/"+name)
         self.loadedModules.append(mod)

@@ -19,7 +19,7 @@ class TwistedBot(irc.IRCClient):
             self.userKicked = []
             self.main = []
         self.logger.log("WARN", "Loading modules")
-        i = Importer(self.logger)
+        i = Importer(self.logger, self.moduleblacklist)
         self.functions = i.functions
         self.joinedFunctions = i.joined
         self.userKicked = i.userKicked

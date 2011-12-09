@@ -11,7 +11,8 @@ class Config(object):
             f = open(self.configfile, "r")
             data = "".join(f.readlines())
             f.close()
-            return yaml.load(data)
+            self.settings = yaml.load(data)
+            return self.settings
         except IOError:
             return False
 

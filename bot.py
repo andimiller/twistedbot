@@ -17,12 +17,14 @@ class TwistedBot(irc.IRCClient):
             self.functions.clear
             self.joinedFunctions = []
             self.userKicked = []
+            self.modechanged = []
             self.main = []
         self.logger.log("WARN", "Loading modules")
         i = Importer(self.logger, self.moduleblacklist)
         self.functions = i.functions
         self.joinedFunctions = i.joined
         self.userKicked = i.userKicked
+        self.modechanged = i.modeChanged
         self.main = i.main
 
     def init(self):
@@ -81,6 +83,10 @@ class TwistedBot(irc.IRCClient):
             message=message.encode("utf-8")
         #hand off to normal msg function
         self.msg(channel, message, length)
+
+    def modeChanged(self, user, channel, set, modes, args):
+        for m in self.modechanged:
+            m(self, user, channel, set, modes, args)
 
     def mainloops(self):
         #self.logger.log("INFO", "Doing main loop")

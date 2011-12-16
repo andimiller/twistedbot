@@ -43,6 +43,8 @@ def fweather(tbot, user, channel, msg):
    else:
       tbot.logger.log("WARN", "falling back to Aberystwyth")
       text=fucking_weather("Aberystwyth")
+   if (len(text.strip())==0):
+       text = "WHERE THE FUCK IS THAT?"
    message=user+": "+text
    tbot.msg(channel, message.encode("utf-8"))
 fweather.rule = '^!fweather'

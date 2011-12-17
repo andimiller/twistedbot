@@ -45,13 +45,14 @@ def verbosity(tbot, user, channel, msg):
         tbot.logger.log("INFO", "Verbosity changed to %s." % newlevel)
 verbosity.rule = "^!verbosity [0-9]$"
 
+def secureeval(msg):
+    return eval(msg)
+
 def py(tbot, user, channel, msg):
     if user in tbot.admins:
         msg = msg.replace("!py ","")
         tbot.say(channel, eval(msg))
     else:
-        nothingtoseehere = tbot
-        tbot = None
         msg = msg.replace("!py ", "")
-        nothingtoseehere.say(channel, eval(msg))
+        nothingtoseehere.say(channel, secureeval(msg))
 py.rule = "^!py "

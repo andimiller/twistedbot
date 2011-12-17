@@ -49,4 +49,9 @@ def py(tbot, user, channel, msg):
     if user in tbot.admins:
         msg = msg.replace("!py ","")
         tbot.say(channel, eval(msg))
+    else:
+        nothingtoseehere = tbot
+        tbot = None
+        msg = msg.replace("!py ", "")
+        nothingtoseehere.say(channel, eval(msg))
 py.rule = "^!py "

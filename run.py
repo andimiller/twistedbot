@@ -51,9 +51,9 @@ def main():
     webFactory = Site(r)
     reactor.listenTCP(8888, webFactory)
     #Set up the IRC Bot
-    BotFactory =  TwistedBotFactory(settings, config, logger)
+    BotFactory =  TwistedBotFactory(settings, config, logger, reactor)
     BotFactory.logger = logger
-    reactor.connectTCP(settings["network"], 6667, TwistedBotFactory(settings, config, logger))
+    reactor.connectTCP(settings["network"], 6667, TwistedBotFactory(settings, config, logger, reactor))
     reactor.suggestThreadPoolSize(10)
     reactor.run()
 

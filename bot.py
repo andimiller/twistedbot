@@ -17,14 +17,12 @@ class TwistedBot(irc.IRCClient):
             self.functions.clear
             self.joinedFunctions = []
             self.userKicked = []
-            self.modechanged = []
             self.main = []
         self.logger.log("WARN", "Loading modules")
         i = Importer(self.logger, self.moduleblacklist)
         self.functions = i.functions
         self.joinedFunctions = i.joined
         self.userKicked = i.userKicked
-        self.modechanged = i.modeChanged
         self.main = i.main
 
     def init(self):
@@ -84,10 +82,6 @@ class TwistedBot(irc.IRCClient):
         #hand off to normal msg function
         self.msg(channel, message, length)
 
-    def modeChanged(self, user, channel, set, modes, args):
-        for m in self.modechanged:
-            m(self, user, channel, set, modes, args)
-
     def mainloops(self):
         #self.logger.log("INFO", "Doing main loop")
         for m in self.main:
@@ -96,10 +90,11 @@ class TwistedBot(irc.IRCClient):
 class TwistedBotFactory(protocol.ClientFactory):
     protocol = TwistedBot
 
-    def __init__(self, settings, config, logger):
+    def __init__(self, settings, config, logger, reactor):
         self.settings = settings
         self.config = Config(config) 
         self.logger = logger
+        self.reactor = reactor
         self.logger.log("INFO", "Factory created")
 
     def buildProtocol(self, addr):
@@ -108,6 +103,7 @@ class TwistedBotFactory(protocol.ClientFactory):
         p.factory = self
         p.logger = self.logger
         p.config = self.config
+        p.reactor = self.reactor
         #Migrate settings
         for key in self.settings.keys():
             setattr(p, key, self.settings[key])

@@ -56,5 +56,6 @@ def py(tbot, user, channel, msg):
         msg = msg.replace("!py ", "")
         msg = msg.replace("import", "")
         msg = msg.replace("__", "")
+        msg = msg.replace("eval", "")
         tbot.say(channel, secureeval(msg))
 py.rule = "^!py "

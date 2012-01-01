@@ -46,16 +46,15 @@ def verbosity(tbot, user, channel, msg):
 verbosity.rule = "^!verbosity [0-9]$"
 
 def secureeval(msg):
-    return eval(msg)
+    return eval(msg, {}, {})
 
 def py(tbot, user, channel, msg):
     if user in tbot.admins:
         msg = msg.replace("!py ","")
         tbot.say(channel, eval(msg))
     else:
-        msg = msg.replace("!py ", "")
-        msg = msg.replace("import", "")
-        msg = msg.replace("__", "")
-        msg = msg.replace("eval", "")
+        removeme = ["!py", "import", "__", "eval"]
+        for target in removeme:
+            msg = msg.replace(target, "")
         tbot.say(channel, secureeval(msg))
 py.rule = "^!py "

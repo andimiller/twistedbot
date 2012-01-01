@@ -16,6 +16,7 @@ class Importer(object):
         self.userKicked = []
         self.joined = []
         self.main = []
+        self.modefunctions = []
         for oldmodule in self.loadedModules:
             self.loadedModules.remove(oldmodule)
             del sys.modules[oldmodule.__name__]
@@ -56,3 +57,6 @@ class Importer(object):
             if "mainMethod" in list:
                 self.logger.log("GOOD", "main: %s" % member)
                 self.main.append(member)
+            if "modeChanged" in list:
+                self.logger.log("GOOD", "modeChanged: %s" % member)
+                self.modefunctions.append(member)

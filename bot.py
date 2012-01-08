@@ -24,6 +24,7 @@ class TwistedBot(irc.IRCClient):
         self.joinedFunctions = i.joined
         self.userKicked = i.userKicked
         self.main = i.main
+        self.modefunctions = i.modefunctions
 
     def init(self):
         self.loadModules()
@@ -86,6 +87,11 @@ class TwistedBot(irc.IRCClient):
         #self.logger.log("INFO", "Doing main loop")
         for m in self.main:
             m(self)
+
+    def modeChanged(self, user, channel, set, modes, args):
+        for m in self.modefunctions:
+            m(self, user, channel, set, modes, args)
+            self.logger.log("INFO", "Launched %s" % m)
 
 class TwistedBotFactory(protocol.ClientFactory):
     protocol = TwistedBot

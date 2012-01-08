@@ -1,3 +1,5 @@
+import random
+
 def kick(tbot, user, channel, msg):
     if user in tbot.admins:
         c = msg.split(" ")

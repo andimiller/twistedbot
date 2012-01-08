@@ -41,7 +41,7 @@ def tweetauto(tbot, user, channel, msg):
    url=data.split(" ")[0].replace("#!/", "")
    text=gettweet(url)
    text=unescape(text)
-   tbot.msg(channel,text)
+   tbot.msg(channel,text.encode("utf-8"))
 tweetauto.rule = r'^https?://twitter.com/'
 
 

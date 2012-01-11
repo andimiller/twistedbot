@@ -18,6 +18,7 @@ class TwistedBot(irc.IRCClient):
             self.joinedFunctions = []
             self.userKicked = []
             self.main = []
+            self.topicfunctions = []
         self.logger.log("WARN", "Loading modules")
         i = Importer(self.logger, self.moduleblacklist)
         self.functions = i.functions
@@ -25,6 +26,7 @@ class TwistedBot(irc.IRCClient):
         self.userKicked = i.userKicked
         self.main = i.main
         self.modefunctions = i.modefunctions
+        self.topicfunctions = i.topicfunctions
 
     def init(self):
         self.loadModules()
@@ -91,6 +93,11 @@ class TwistedBot(irc.IRCClient):
     def modeChanged(self, user, channel, set, modes, args):
         for m in self.modefunctions:
             m(self, user, channel, set, modes, args)
+            self.logger.log("INFO", "Launched %s" % m)
+
+    def topicUpdated(self, user, channel, newTopic):
+        for m in self.topicfunctions:
+            m(self, user, channel, newTopic)
             self.logger.log("INFO", "Launched %s" % m)
 
 class TwistedBotFactory(protocol.ClientFactory):

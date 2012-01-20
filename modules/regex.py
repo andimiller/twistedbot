@@ -22,7 +22,7 @@ substitute.rule="^s\/.*"
 
 def directedsubstitute(tbot, user, channel, msg):
     (target, regex) = re.compile("^(.*?): (.*)").match(msg).groups()
-    newmessage = sub(tbot.messages[target], msg)
+    newmessage = sub(tbot.messages[target], regex)
     if newmessage != tbot.messages[target]:
         tbot.messages[target] = newmessage
         tbot.msg(channel, "<%s> %s" % (user, newmessage))

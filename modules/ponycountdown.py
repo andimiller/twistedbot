@@ -8,7 +8,11 @@ def nextponies():
             (datetime(2011, 12, 3,  15),2,9,"Sweet and Elite"),
             (datetime(2011, 12, 10, 15),2,10,"Secret of My Excess"),
             (datetime(2011, 12, 17, 15),2,11,"Hearth's Warming Eve"),
-            (datetime(2012,  1, 7,  15),2,12,"Family Appreciation Day")
+            (datetime(2012,  1, 7,  15),2,12,"Family Appreciation Day"),
+            (datetime(2012,  1, 14, 15),2,13,"Baby Cakes"),
+            (datetime(2012,  1, 21, 15),2,14,"The last Roundup"),
+            (datetime(2012,  1, 28, 15),2,15,"The Super Speedy Cider Squeezy 6000"),
+            (datetime(2012,  2, 4,  15),2,16,"Read It and Weep")
             ]
     r=map(lambda x:(x[0]-datetime.now(),x[1],x[2],x[3]), times)
     r=sorted(r)

@@ -17,6 +17,7 @@ class Importer(object):
         self.joined = []
         self.main = []
         self.modefunctions = []
+        self.topicfunctions = []
         for oldmodule in self.loadedModules:
             self.loadedModules.remove(oldmodule)
             del sys.modules[oldmodule.__name__]
@@ -60,3 +61,6 @@ class Importer(object):
             if "modeChanged" in list:
                 self.logger.log("GOOD", "modeChanged: %s" % member)
                 self.modefunctions.append(member)
+            if "topicUpdated" in list:
+                self.logger.log("GOOD", "topicUpdated: %s" % member)
+                self.topicfunctions.append(member)

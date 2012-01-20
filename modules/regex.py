@@ -2,8 +2,16 @@ import re
 import datetime
 
 def sub(message, regex):
+    regex = regex.split()[0]
     regex=re.split("(?<!\\\\)/",regex)
-    return re.sub(regex[1], regex[2], message)
+    regex[3] = regex[3].strip()
+    if not regex[3]:
+        count = 1
+    elif "g" in regex[3]:
+        count = 0
+    elif regex[3].isdigit():
+        count = int(regex[3])
+    return re.sub(regex[1], regex[2], message, count)
 
 def substitute(tbot, user, channel, msg):
     newmessage = sub(tbot.messages[user], msg)

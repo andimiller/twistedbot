@@ -2,7 +2,6 @@ import re
 import datetime
 
 def sub(message, regex):
-    regex = regex.split()[0]
     regex=re.split("(?<!\\\\)/",regex)
     regex[3] = regex[3].strip()
     if not regex[3]:

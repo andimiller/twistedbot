@@ -9,3 +9,11 @@ def rainbowdash(tbot, channel):
             ]
     tbot.msg(channel,random.choice(quotes))
 rainbowdash.joined = True
+
+def rainbowdash_ascii(tbot, user, channel, message):
+    # Whoa. print all that rainbow dash you gonna have a wicked grouchy #42
+    # (probably why I put it in a module that's blacklisted >_>)
+    rainbowdash = open("modules/rainbowdash.ascii.txt").read().split("\n")
+    for line in rainbowdash:
+        tbot.msg(channel, line)
+rainbowdash_ascii.rule = "!rainbowdash"

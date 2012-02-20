@@ -8,7 +8,7 @@ def rainbowdash(tbot, channel):
             "I could clear the sky in 10 seconds flat!"
             ]
     tbot.msg(channel,random.choice(quotes))
-rainbowdash.joined = True
+#rainbowdash.joined = True
 
 def rainbowdash_ascii(tbot, user, channel, message):
     # Whoa. print all that rainbow dash you gonna have a wicked grouchy #42

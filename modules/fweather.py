@@ -31,7 +31,8 @@ def fucking_weather(place):
    soup=BeautifulSoup(f)
    result=str(soup.find("p", {"class" : "large" }))
    remark=str(soup.find("p", {"class" : "remark"}))
-   result=result+" "+remark
+   if (remark!="None"):
+       result=result+" "+remark
    if (result!="None"):
       removetags=re.compile("<(.|\n)*?>")
       return unescape(removetags.sub("",result)).replace('\n', ' ')

@@ -85,7 +85,7 @@ class TwistedJabberBot(object):
     def msg(self, target, text, group=True):
         if type(text)!=types.StringType:
             text = str(text)
-        text = text.encode("utf-8")
+        text = unicode(text, encoding="utf-8", errors='replace')
         self.logger.log("INFO", "Trying to send %s: %s" % (target, text))
         message = domish.Element((None, 'message'))
         message['to'] = target

@@ -26,10 +26,12 @@ def unescape(text):
     return re.sub("&#?\w+;", fixup, text)
 
 def fucking_weather(place):
-   url = "http://www.thefuckingweather.com/?zipcode=%s&CELSIUS=yes" % place
+   url = "http://www.thefuckingweather.com/?where=%s&unit=c" % place
    f=urllib.urlopen(url)
    soup=BeautifulSoup(f)
-   result=str(soup.find("div", {"class" : "large" }))
+   result=str(soup.find("p", {"class" : "large" }))
+   remark=str(soup.find("p", {"class" : "remark"}))
+   result=result+" "+remark
    if (result!="None"):
       removetags=re.compile("<(.|\n)*?>")
       return unescape(removetags.sub("",result)).replace('\n', ' ')

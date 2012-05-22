@@ -3,14 +3,20 @@ def voteyes(tbot, user, channel, msg):
     if channel not in tbot.voteyes:
         tbot.msg(channel, "%s: there is not currently a vote in %s" % (user, channel))
     else:
-        tbot.voteyes[channel]+=1
+        if (user not in tbot.voteyes[channel]) and (user not in tbot.voteno[channel]):
+            tbot.voteyes[channel].append(user)
+        else:
+            tbot.msg(channel, "%s: you cannot vote twice" % user)
 voteyes.rule="^!yes"
 
 def voteno(tbot, user, channel, msg):
     if channel not in tbot.voteno:
         tbot.msg(channel, "%s: there is not currently a vote in %s" % (user, channel))
     else:
-        tbot.voteno[channel]+=1
+        if (user not in tbot.voteno[channel]) and (user not in tbot.voteyes[channel]):
+            tbot.voteno[channel].append(user)
+        else:
+            tbot.msg(channel, "%s: you cannot vote twice" % user)
 voteno.rule="^!no"
 
 def finishvote(tbot, channel):
@@ -31,8 +37,8 @@ def startvote(tbot, user, channel, msg):
     if not hasattr(tbot, "vote"):
         tbot.vote = {}
     subject = msg.replace("!vote", "").strip()
-    tbot.voteno[channel] = 0
-    tbot.voteyes[channel] = 0
+    tbot.voteno[channel] = []
+    tbot.voteyes[channel] = []
     tbot.vote[channel] = subject
     tbot.say(channel, "Starting a vote on: %s, you have 30 seconds to get your votes in with !yes or !no." % subject)
     tbot.reactor.callLater(30, finishvote, tbot, channel)

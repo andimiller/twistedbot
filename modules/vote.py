@@ -20,6 +20,8 @@ def voteno(tbot, user, channel, msg):
 voteno.rule="^!no"
 
 def finishvote(tbot, channel):
+    tbot.voteyes[channel] = len(tbot.voteyes[channel])
+    tbot.voteno[channel] = len(tbot.voteno[channel])
     tbot.msg(channel, "Vote finished: %s for, %s against" % (tbot.voteyes[channel], tbot.voteno[channel]))
     if tbot.voteyes[channel]>tbot.voteno[channel]:
         tbot.msg(channel, "Motion carried: %s" % tbot.vote[channel])

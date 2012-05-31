@@ -1,5 +1,6 @@
 import urllib2
 import urllib
+import json
 
 import re, htmlentitydefs
 
@@ -25,25 +26,23 @@ def unescape(text):
     return re.sub("&#?\w+;", fixup, text)
 
 def gettweet(url):
-   print "gettitle called with:"+url
-   f=urllib.urlopen(url)
-   data=f.read()
-   data=data.split("\n")
-   message=""
-   for line in data:
-      if line.count("description") and line.count("<meta"):
-         line=line.split("\"")
-         message=message+line[1]
-   return message
+    print "gettitle called with: " + url
+    tweet_id =  url.split('/')[-1] # Probably needs a better way to get the tweet id than this
+    api_url = "https://api.twitter.com/1/statuses/show/%s.json" % tweet_id
+    f = urllib.urlopen(api_url)
+    data = f.read()
+    data = json.loads(data)
+    return data["text"]
 
 def tweetauto(tbot, user, channel, msg):
-   data=msg
-   url=data.split(" ")[0].replace("#!/", "")
-   text=gettweet(url)
-   text=unescape(text)
-   tbot.msg(channel,text.encode("utf-8"))
+    data=msg
+    url=data.split(" ")[0].replace("#!/", "")
+    text=gettweet(url)
+    text=unescape(text)
+    tbot.msg(channel,text.encode("utf-8"))
 tweetauto.rule = r'^https?://twitter.com/'
 
 
-if __name__ == '__main__': 
-   print __doc__.strip()
+if __name__ == '__main__':
+    tweet_url = "https://twitter.com/MrBrownstone_/status/4507596236"
+    print gettweet(tweet_url)

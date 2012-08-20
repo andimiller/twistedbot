@@ -20,8 +20,8 @@ def bandetect(tbot, user, channel, set, modes, args):
             return
         for index,b in enumerate(modes):
             tbot.logger.log("INFO", "Saw a ban by %s" % user)
-            tbot.say(channel, "%s: %s Your ban will be removed in 30 seconds, to extend your ban, please ping a channel Admin." % (nick,choice(banresponses)))
-            d = tbot.reactor.callLater(30, removeban, tbot, channel, args[index])
+            tbot.say(channel, "%s: %s Your ban will be removed in 5 minutes, to extend your ban, please ping a channel Admin." % (nick,choice(banresponses)))
+            d = tbot.reactor.callLater(300, removeban, tbot, channel, args[index])
             tbot.mode(channel, False, "-o %s" % nick)
 bandetect.modeChanged = True
 

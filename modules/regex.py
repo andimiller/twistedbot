@@ -16,18 +16,24 @@ def sub(message, regex):
     return re.sub(regex[1], regex[2], message, count)
 
 def substitute(tbot, user, channel, msg):
-    newmessage = sub(tbot.messages[user], msg)
-    if newmessage != tbot.messages[user]:
-        tbot.messages[user] = newmessage
-        tbot.msg(channel, "<%s> %s" % (user, newmessage))
+    if user in tbot.messages:
+        newmessage = sub(tbot.messages[user], msg)
+        if newmessage != tbot.messages[user]:
+            tbot.messages[user] = newmessage
+            tbot.msg(channel, "<%s> %s" % (user, newmessage))
+    else:
+        tbot.msg(channel, "Uh %s... you haven't said anything yet" % user)
 substitute.rule="^s\/.*"
 
 def directedsubstitute(tbot, user, channel, msg):
     (target, regex) = re.compile("^(.*?): (.*)").match(msg).groups()
-    newmessage = sub(tbot.messages[target], regex)
-    if newmessage != tbot.messages[target]:
-        tbot.messages[target] = newmessage
-        tbot.msg(channel, "<%s> %s" % (user, newmessage))
+    if target in tbot.messages:
+        newmessage = sub(tbot.messages[target], regex)
+        if newmessage != tbot.messages[target]:
+            tbot.messages[target] = newmessage
+            tbot.msg(channel, "%s thinks %s meant: %s" % (user, target, newmessage))
+    else:
+        tbot.msg(channel, "%s: %s doesn't exist! You don't have to correct them!" % (user, target))
 directedsubstitute.rule="^.*?: s/.*"
 
 def lastmsg(tbot, user, channel, msg):

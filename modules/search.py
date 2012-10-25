@@ -23,23 +23,32 @@ def first_result(query):
     Return the first result on google depending on the keyword
     """
     results = search_google(query)
-    result = results['responseData']['results'][0]
-    return "%(titleNoFormatting)s -- %(url)s" % result
+    if results['responseData']:
+        result = results['responseData']['results'][0]
+        return "%(titleNoFormatting)s -- %(url)s" % result
+    else:
+        return "Google is crying in the corner. I think you need to leave it alone."
 
 def count_results(query):
     """
     Return the number of results
     """
     results = search_google(query)
-    count = results['responseData']['cursor']['resultCount']
-    return count
+    if results['responseData']:
+        count = results['responseData']['cursor']['resultCount']
+        return count
+    else:
+        return "Google's abacus is broken. Go abuse another bots features (try ~fishpuns!!!)"
 
 def google_fight(fighter1, fighter2):
     """
     Returns the result of a google fight between two search results
     """
-    fighter1_res = int(count_results(fighter1).replace(",", ""))
-    fighter2_res = int(count_results(fighter2).replace(",", ""))
+    try:
+        fighter1_res = int(count_results(fighter1).replace(",", ""))
+        fighter2_res = int(count_results(fighter2).replace(",", ""))
+    except:
+        return "Google has had enough of the fighting! Why can't you people get along?"
     res_tuple = (fighter1, fighter1_res, fighter2, fighter2_res)
     result = "%s = %s, %s = %s" % res_tuple
     if fighter1_res > fighter2_res:

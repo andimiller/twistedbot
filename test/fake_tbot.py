@@ -7,6 +7,7 @@ import re
 class TestedBot:
     bot_messages = []
     functions = []
+    messages = {}
 
     def __init__(self):
         pass
@@ -18,7 +19,8 @@ class TestedBot:
         self.functions.append(func)
 
     def last_message(self):
-        return self.bot_messages[-1]
+        if len(self.bot_messages):
+            return self.bot_messages[-1]
 
     def listen(self, usr, channel, message):
         for func in self.functions:

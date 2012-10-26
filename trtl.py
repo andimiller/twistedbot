@@ -7,6 +7,7 @@
 """
 import os
 import sys
+import traceback
 import readline
 import re
 regex = re.compile("\x03(?:\d{1,2}(?:,\d{1,2})?)?", re.UNICODE)
@@ -25,7 +26,7 @@ for module in TO_LOAD:
         for function in dir(MODULES[module]):
             glob = MODULES[module].__dict__[function]
             if hasattr(glob, 'rule'):
-                TBOT.register(glob)
+                TBOT.register(glob, function)
     except:
         pass
 
@@ -46,17 +47,25 @@ while True:
         print "Bye!"
         sys.exit()
     if msg and msg[0] == "/":
-        (command, value) = msg.split(" ", 1)
+        try:
+            (command, value) = msg.split(" ", 1)
+        except:
+            command = msg
         if command == "/nick":
             USER = value
             print "(Nick has changed to '%s')" % USER
         elif command == "/j":
             CHANNEL = value
             print "(Channel has changed to '%s')" % CHANNEL
+        elif command == "/rules":
+            print "\n".join(TBOT.rules())
         else:
             print "(Not a recognised command)"
     else:
-        TBOT.listen(USER, CHANNEL, msg)
-        if [] != TBOT.bot_messages:
-            print regex.sub('', "\n".join([x[1] for x in TBOT.bot_messages]))
-            TBOT.bot_messages = []
+        try:
+            TBOT.listen(USER, CHANNEL, msg)
+            if [] != TBOT.bot_messages:
+                print regex.sub('', "\n".join([x[1] for x in TBOT.bot_messages]))
+                TBOT.bot_messages = []
+        except:
+            print traceback.format_exc()

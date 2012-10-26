@@ -62,13 +62,13 @@ def g(tbot, user, channel, msg):
     message = msg.replace("!g", "", 1).strip()
     result = first_result(message)
     tbot.msg(channel, "%s: %s" % (user, result.encode("utf-8")))
-g.rule = '^!g'
+g.rule = '^!g '
 
 def gc(tbot, user, channel, msg):
     message = msg.replace("!gc", "", 1).strip()
-    result = first_result(message)
+    result = count_results(message)
     tbot.msg(channel, "%s: %s" % (user, result.encode("utf-8")))
-gc.rule = '^!gc'
+gc.rule = '^!gc '
 
 def gfight(tbot, user, channel, msg):
     regex = re.compile('TwistedBot: (.*?) vs (.*)')

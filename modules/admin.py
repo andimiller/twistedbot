@@ -62,8 +62,9 @@ def py(tbot, user, channel, msg):
         tbot.say(channel, secureeval(msg))
 py.rule = "^!py "
 
-def makealias(foo):
+def makealias(rule, foo):
     def x(tbot, user, channel, msg):
+        args = re.match(rule, msg).groups()
         data=eval(foo)
         tbot.say(channel, data)
     return x
@@ -73,8 +74,8 @@ def alias(tbot, user, channel, msg):
         msg = msg.replace("!alias", "").strip()
         msg = msg.split("=")
         command = re.compile(msg[0])
-        function = makealias(msg[1])
+        function = makealias(msg[0], msg[1])
         tbot.functions[command]=function
         tbot.say(channel, "aliased %s to %s" % (command, function))
-        function(tbot, user, channel, msg)
+        #function(tbot, user, channel, msg)
 alias.rule = "^!alias.*=.*"

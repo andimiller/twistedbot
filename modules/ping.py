@@ -16,6 +16,12 @@ def love(tbot, user, channel, msg):
    tbot.msg(channel,"<3 "+user)
 love.rule='<3 TwistedBot'
 
+def thanks_ants(tbot, user, channel, msg):
+    name = msg.replace("!thanks ", '').strip()
+    thname = re.sub(r'^[bcdfghjklmnpqrstvwxyz]*', '', name.lower()) or name.lower()
+    tbot.msg(channel, "Thanks %s... Th%s" % (name, thname))
+thanks_ants.rule = '!thanks '
+
 def xory(question):
    return random.choice(re.split(",|or", question)).strip()
 

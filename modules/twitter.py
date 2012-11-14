@@ -27,7 +27,7 @@ def unescape(text):
 
 def gettweet(url):
     print "gettitle called with: " + url
-    tweet_id =  url.split('/')[-1] # Probably needs a better way to get the tweet id than this
+    tweet_id =  re.match(tweetauto.rule, url).groups()[-1]
     api_url = "https://api.twitter.com/1/statuses/show/%s.json" % tweet_id
     f = urllib.urlopen(api_url)
     data = f.read()
@@ -40,7 +40,7 @@ def tweetauto(tbot, user, channel, msg):
     text=gettweet(url)
     text=unescape(text)
     tbot.msg(channel,text.encode("utf-8"))
-tweetauto.rule = r'^https?://twitter.com/'
+tweetauto.rule = r'^https?://(www.)?twitter.com/\w+/status/([0-9]+)'
 
 
 if __name__ == '__main__':

@@ -38,11 +38,14 @@ def startvote(tbot, user, channel, msg):
         tbot.voteyes = {}
     if not hasattr(tbot, "vote"):
         tbot.vote = {}
-    subject = msg.replace("!vote", "").strip()
-    tbot.voteno[channel] = []
-    tbot.voteyes[channel] = []
-    tbot.vote[channel] = subject
-    tbot.say(channel, "Starting a vote on: %s, you have 30 seconds to get your votes in with !yes or !no." % subject)
-    tbot.reactor.callLater(30, finishvote, tbot, channel)
+    if channel not in tbot.vote:
+	    subject = msg.replace("!vote", "").strip()
+	    tbot.voteno[channel] = []
+	    tbot.voteyes[channel] = []
+	    tbot.vote[channel] = subject
+	    tbot.say(channel, "Starting a vote on: %s, you have 30 seconds to get your votes in with !yes or !no." % subject)
+	    tbot.reactor.callLater(30, finishvote, tbot, channel)
+    else:
+	    tbot.say(channel, "Please wait until the current vote finishes")
 startvote.rule="^!vote"
 

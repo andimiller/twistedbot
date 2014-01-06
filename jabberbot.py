@@ -25,12 +25,10 @@ class TwistedJabberBot(object):
         xmlstream.send(presence)
         xmlstream.addObserver('/message',  self.debug)
         xmlstream.addObserver('/presence', self.debug)
-        xmlstream.addObserver('/iq',       self.debug)   
+        xmlstream.addObserver('/iq',       self.debug)
         xmlstream.addObserver('/iq',       self.pong)
         xmlstream.addObserver('/message', self.gotMessage)
-        reactor.callLater(4, self.join, "dev@conference.gradwell.com/TwistedBot")
-        reactor.callLater(10, self.msg, "andi.miller@gradwell.com", "Hello World!")
-    
+
     def pong(self, message):
         self.logger.log("GOOD", "Got a ping: %s" % message.toXml())
         pong = domish.Element(('jabber:client', 'iq'))
@@ -42,21 +40,19 @@ class TwistedJabberBot(object):
 
     def debug(self, elem):
         self.logger.log("INFO", elem.toXml().encode('utf-8'))
-        
+
     def join(self, room):
         tjid = jid.JID(room)
         presence = domish.Element(('jabber:client', 'presence'))
         presence['to']=tjid.full()
         self.xmlstream.send(presence)
-    
+
     def gotMessage(self, message):
         self.logger.log("INFO", "<%s>: %s" % (message["from"], message))
         sender = message["from"]
         channel = False
-        if sender.count("conference.gradwell.com"):
-            channel = sender
-            (sender, user) = sender.split("/")
-            #self.logger.log("WARN", "Channel detected, truncating sender to %s" % sender)
+        channel = sender
+        (sender, user) = sender.split("/")
         body = ""
         for e in message.elements():
             if e.name == "body":
@@ -77,7 +73,7 @@ class TwistedJabberBot(object):
 
     def gotSomething(self, el):
         logger.log.log("OKAY",'Got something: %s -> %s' % (el.name, str(el.attributes)))
-    
+
 
     def say(self, target, text):
         self.msg(target, text)
@@ -94,19 +90,3 @@ class TwistedJabberBot(object):
             message['type']='groupchat'
         #self.logger.log("GOOD", message.toXml())
         self.xmlstream.send(message)
-
-if __name__ == "__main__":
-    logger = Logger(2)
-    c = Config("jconfig.yaml")
-    settings = c.parse()
-    importer = Importer(logger, settings["moduleblacklist"])
-    me = settings["username"]
-    j = jid.JID(me)
-    p = settings["password"]
-    
-    factory = client.XMPPClientFactory(j,p)
-    tbot = TwistedJabberBot(logger)
-    tbot.functions = importer.functions
-    factory.addBootstrap('//event/stream/authd',tbot.authd)
-    reactor.connectTCP(settings["network"], 5222, factory)
-    reactor.run()

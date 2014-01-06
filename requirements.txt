@@ -1,0 +1,7 @@
+twisted
+twisted-words
+arrow
+pysqlite
+eveapi
+beautifulsoup
+requests

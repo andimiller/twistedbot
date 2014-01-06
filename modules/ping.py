@@ -16,12 +16,6 @@ def love(tbot, user, channel, msg):
    tbot.msg(channel,"<3 "+user)
 love.rule='<3 TwistedBot'
 
-def thanks_ants(tbot, user, channel, msg):
-    name = msg.replace("!thanks ", '').strip()
-    thname = re.sub(r'^[bcdfghjklmnpqrstvwxyz]*', '', name.lower()) or name.lower()
-    tbot.msg(channel, "Thanks %s... Th%s" % (name, thname))
-thanks_ants.rule = '!thanks '
-
 def xory(question):
    return random.choice(re.split(",|or", question)).strip()
 
@@ -37,9 +31,9 @@ def question(tbot, user, channel, msg):
 question.rule = 'TwistedBot: ([Ss]hould|[Cc]an) (\w) (.*)\?'
 
 def basara(tbot, user, channel, msg):
-   tbot.msg(channel,"Yukimura!")
+   tbot.msg(channel,"FUCK YOU!")
 basara.rule="^Oyakata-sama!"
 
 def basaratwo(tbot, user, channel, msg):
-   tbot.msg(channel,"Oyakata-sama!")
+   tbot.msg(channel,"FUCK YOU!")
 basaratwo.rule="^Yukimura!"

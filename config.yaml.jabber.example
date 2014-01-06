@@ -1,0 +1,10 @@
+protocol: xmpp
+admins: [Lucia Denniard]
+channels: [test@conference.xxpizzaxx.com, other@conference.public.xxpizzaxx.com]
+moduleblacklist: [rainbowdash]
+network: xxpizzaxx.com
+server: xxpizzaxx.com
+username: twistedbot
+nickname: TwistedBot
+password: passworgoeshere
+verbosity: 2

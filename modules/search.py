@@ -66,7 +66,7 @@ g.rule = '^!g '
 
 def gc(tbot, user, channel, msg):
     message = msg.replace("!gc", "", 1).strip()
-    result = count_results(message)
+    result = first_result(message)
     tbot.msg(channel, "%s: %s" % (user, result.encode("utf-8")))
 gc.rule = '^!gc '
 

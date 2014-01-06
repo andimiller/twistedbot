@@ -1,4 +1,5 @@
 import random
+import cmath
 import re
 
 def kick(tbot, user, channel, msg):

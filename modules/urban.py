@@ -40,7 +40,7 @@ def urbandictionary(tbot, user, channel, msg):
    if not definition:
       tbot.msg(channel, "%s: I'm afraid I cannot find an entry for that" % user)
    else:
-      tbot.msg(channel, "%s: %s" % (user, unescape(definition)))
+      tbot.msg(channel, u"%s: %s" % (user, unescape(definition)))
 urbandictionary.rule = '(!ud)([A-Za-z0-9 ,.-?:/]*)'
 
 #if __name__ == '__main__':

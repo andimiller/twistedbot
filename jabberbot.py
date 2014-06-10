@@ -13,6 +13,7 @@ class TwistedJabberBot(object):
     logger = None
     functions = None
     admins = ["Sylnai"]
+    reactor = reactor
 
     def __init__(self, logger):
         self.logger = logger
